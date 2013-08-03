@@ -57,7 +57,7 @@ IRC.Commands = new Class({
 	JOIN: function(msg) {
 		if(this.isChannelName(msg)) {
 			this.server.send('JOIN ' +msg);	
-			document.fireEvent('/channel/join', [msg]);
+			window.fireEvent('/channel/join', [msg]);
 		}               
         console.log("attempting to join channel(s) : " +msg);;
         
@@ -144,6 +144,10 @@ IRC.Commands = new Class({
 
 	WALLOPS: function(msg) {
 
+	},
+
+	USER: function(msg) {
+		this.server.send('USER ' +msg);	
 	},
 
 	USERS: function(msg) {
@@ -261,9 +265,7 @@ IRC.Commands = new Class({
 	},
 
 	ME: function(msg) {
-        this.server.sendAction(this.server.getActiveChannel(), msg);
-        this.handleAction(this.getNick(), this.host, target, msg);
-        
+        this.server.sendAction(this.server.getActiveChannel(), msg);       
 	},
 
 	NAMES: function(msg) {

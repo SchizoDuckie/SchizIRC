@@ -33,10 +33,10 @@ IRC.Connection = new Class({
 		this.eventChannels.JOIN = '/connection/'+options.server+'/join';
 		this.eventChannels.PART = '/connection/'+options.server+'/part';
 		
-		document.addEvent(this.eventChannels.LOST, this.disconnected);
-		document.addEvent(this.eventChannels.ERROR, this.connectionError);
-		document.addEvent(this.eventChannels.SEND, this.send);
-		document.addEvent(EVENT_CHANNELS.CONNECTION_DESTROY, this.destroy);
+		window.addEvent(this.eventChannels.LOST, this.disconnected);
+		window.addEvent(this.eventChannels.ERROR, this.connectionError);
+		window.addEvent(this.eventChannels.SEND, this.send);
+		window.addEvent(EVENT_CHANNELS.CONNECTION_DESTROY, this.destroy);
 		this.determineAdapter();
 	},
 
@@ -92,7 +92,7 @@ IRC.Connection = new Class({
 	    this.established = false;
 	    this.connected = false;
 	    console.log("[IRC.Connection] Disconnected from server.", this.options.server);
-	    document.fireEvent('/connection/'+this.options.server+'/lost', [" Disconnected from server."+ this.options.server])
+	    window.fireEvent('/connection/'+this.options.server+'/lost', [" Disconnected from server."+ this.options.server])
 	}
 
 });

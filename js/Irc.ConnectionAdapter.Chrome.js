@@ -79,7 +79,7 @@ IRC.ChromeConnectionAdapter = new Class({
 	    if(endLine > -1) {
 	    	var messages = this.dataPackage.substr(0, endLine).split("\r\n"); // grab the messages that came in so far and split them by line.
 	    	for(i=0; i<messages.length; i++) {
-	    		document.fireEvent(this.eventChannels.DATAAVAILABLE, [new IRC.Server.Message(messages[i])]);
+	    		window.fireEvent(this.eventChannels.DATAAVAILABLE, [new IRC.Server.Message(messages[i])]);
 	    	}
 	    	this.dataPackage = this.dataPackage.substr(endLine +2); // preseve the rest of the queue.
 	    	messages = null;

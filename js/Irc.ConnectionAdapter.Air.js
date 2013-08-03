@@ -15,7 +15,7 @@ IRC.AirConnectionAdapter = new Class({
 		this.setOptions(options);
 		this.eventChannels = eventChannels;
 		
-		document.addEvent(this.eventChannels.AVAILABLE, this.createSocket);
+		window.addEvent(this.eventChannels.AVAILABLE, this.createSocket);
 	},
 	
 	connect: function() {
@@ -90,7 +90,7 @@ IRC.AirConnectionAdapter = new Class({
 	    if(endLine > -1) {
 	    	var messages = this.dataPackage.substr(0, endLine).split("\r\n"); // grab the messages that came in so far and split them by line.
 	    	for(i=0; i<messages.length; i++) {
-	    		document.fireEvent(this.eventChannels.DATAAVAILABLE, [new IRC.Server.Message(messages[i])]);
+	    		window.fireEvent(this.eventChannels.DATAAVAILABLE, [new IRC.Server.Message(messages[i])]);
 	    	}
 	    	this.dataPackage = this.dataPackage.substr(endLine +2); // preseve the rest of the queue.
 	    	messages = null;
@@ -101,11 +101,11 @@ IRC.AirConnectionAdapter = new Class({
 		console.log("[IRC.Connection] Socket status changed: " , evt);
 		var status = this.monitor.available;
 	    if (status && this.autoReconnect && !this.connected) {
-	 	  document.fireEvent(this.eventChannels.AVAILABLE);
+	 	  window.fireEvent(this.eventChannels.AVAILABLE);
 	    } else if (!status && this.stayConnected && this._isConnected) {
-	      document.fireEvent(this.eventChannels.LOST);
+	      window.fireEvent(this.eventChannels.LOST);
 	    } else if (!status && this.stayConnected) {
-	      document.fireEvent(this.eventChannels.ERROR, [evt]);
+	      window.fireEvent(this.eventChannels.ERROR, [evt]);
 	    }
 	}
 

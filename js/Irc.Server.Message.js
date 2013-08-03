@@ -7,8 +7,13 @@ IRC.Server.Message = new Class({
 	messageContent: false,
 	isServerMessage: false,
 	isUserMessage: false,
+	isAction: false,
+	received: false,
+	fromUser: '',
 
 	initialize: function(line, hostName) {
+
+		this.received = new Date();
 		if(line[0] ==':') line = line.substring(1);
 		this.hostName = hostName;
 		this.messageData = line.split(" ");
@@ -24,10 +29,12 @@ IRC.Server.Message = new Class({
 			this.messageCode = this.messageData[0];
 		}
 		if(this.isServerMessage) {
+			this.fromUser = '!SYSTEM!';
 			switch(this.messageCode) {
 				case 'PING':
 				case 'PONG':
 				case 'ERROR':
+				case 'MODE':
 					this.messageData = Array.splice(this.messageData, 1);
 				break;
 				case 'NOTICE':
@@ -42,7 +49,18 @@ IRC.Server.Message = new Class({
 					this.messageData = Array.splice(this.messageData, 3);
 				break;
 				case 'JOIN':
-					this.messageData[2] = this.messageData[2].substring(1);
+					this.messageData[2] = this.messageData[2].substr(1);
+				break;
+				case 'PRIVMSG':
+					console.log("PRIVATE MESSGAE!" , JSON.encode(this.messageData[3]));
+					this.fromUser = this.messageData[0];
+					this.toChannel = this.messageData[2];
+					if(this.messageData[3] == ':'+String.fromCharCode(1)+'ACTION') {
+						this.isAction = true;	
+						this.messageData = Array.splice(this.messageData, 4);
+					} else {
+						this.messageData = Array.splice(this.messageData, 3);	
+					}					
 				break;
 				default: 
 					this.messageData = Array.splice(this.messageData, 4);
@@ -50,9 +68,8 @@ IRC.Server.Message = new Class({
 			}
 		} else {
 			this.isUserMessage = true;
-
 		}
-		this.messageContent = this.messageData.join(' ').trim();
+		this.messageContent = this.messageData.join(' ');
 		if(this.isServerMessage && this.messageCode != 'PING' &&  this.messageContent[0] == ':' ) { 
 			this.messageContent = this.messageContent.substring(1);
 		}
@@ -62,6 +79,21 @@ IRC.Server.Message = new Class({
 
 	getContent: function() {
 		return this.messageContent;
+	},
+
+	getFormattedContent: function() {
+		var output = ['['+this.received.format('%H:%M')+']'];
+		var user = this.fromUser.split('!')[0];
+		if(this.fromUser != "!SYSTEM!") {
+			output.push(this.isAction ? '* '+user : this.htmlEntities('<'+user+'>'));	
+		}
+		output.push(this.decorate(this.messageContent));
+		console.log("[IRC.Server.Message] :"+this.messageCode+" for " + this.toChannel + " :" +this.messageContent+" = " +output.join(''));
+		return output.join(' ');
+	},
+
+	decorate: function (msg) {
+		return Gui.MessageDecorator.decorateMessage(msg);
 	},
 
 	/**
@@ -87,7 +119,6 @@ IRC.Server.Message = new Class({
 	},
 
 	PING: function(server) {
-		console.log("PING Received! sending PONG!");
 		server.send('PONG '+this.messageContent.replace("PING ", ''));
 	},
 
@@ -96,22 +127,24 @@ IRC.Server.Message = new Class({
 	},
 
 	PONG: function(server) {
-		console.log("PONG Received! sending new Ping in 30s!");
 		var chan = server.eventChannels.SEND;
 		setTimeout(function() {
-			document.fireEvent(chan, "PING SCHIZIRC-PINGPONG");
+			window.fireEvent(chan, "PING SCHIZIRC-PINGPONG");
 		}, 30000);
 		
 	},
 
 	JOIN: function(server) {
 		console.log("[IRC.Server.Message] Channel joined!", this.messageContent, this);
-		document.fireEvent(server.eventChannels.JOIN, this.messageContent);
+		window.fireEvent(server.eventChannels.JOIN, this.messageContent);
 	},
 
 	NAMES_LIST: function(server) {
 		console.log("Received names list!", this.messageContent);
+	},
 
+	PRIVMSG: function(server) {		
+		window.fireEvent('/channel/'+this.toChannel.substring(1)+'/message', [this]);
 	}
 
 })

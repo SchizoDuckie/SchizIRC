@@ -31,11 +31,11 @@ IRC.Connection = new Class({
 		this.eventChannels.SEND = '/connection/'+options.server+'/send';
 		this.eventChannels.CLOSE = '/connection/'+options.server+'/close';
 
-		document.addEvent(this.eventChannels.AVAILABLE, this.createSocket);
-		document.addEvent(this.eventChannels.LOST, this.disconnected);
-		document.addEvent(this.eventChannels.ERROR, this.connectionError);
-		document.addEvent(this.eventChannels.SEND, this.send);
-		document.addEvent(EVENT_CHANNELS.CONNECTION_DESTROY', this.destroy);
+		window.addEvent(this.eventChannels.AVAILABLE, this.createSocket);
+		window.addEvent(this.eventChannels.LOST, this.disconnected);
+		window.addEvent(this.eventChannels.ERROR, this.connectionError);
+		window.addEvent(this.eventChannels.SEND, this.send);
+		window.addEvent(EVENT_CHANNELS.CONNECTION_DESTROY, this.destroy);
 	},
 
 	connect: function() {
@@ -45,7 +45,7 @@ IRC.Connection = new Class({
 		var chan = this.eventChannels.AVAILABLE;
 		this.socket = chrome.socket.create('tcp' , null, function(sockInfo) {
 				console.log("Chrome socket created: ", sockInfo);
-				document.fireEvent(chan, sockInfo);
+				window.fireEvent(chan, sockInfo);
 		});
 	},
 
@@ -59,11 +59,11 @@ IRC.Connection = new Class({
 		console.log("[IRC.Connection] Socket status changed: " , evt);
 		var status = this.monitor.available;
 	    if (status && this.autoReconnect && !this.connected) {
-	 	  document.fireEvent(this.eventChannels.AVAILABLE);
+	 	  window.fireEvent(this.eventChannels.AVAILABLE);
 	    } else if (!status && this.stayConnected && this._isConnected) {
-	      document.fireEvent(this.eventChannels.LOST);
+	      window.fireEvent(this.eventChannels.LOST);
 	    } else if (!status && this.stayConnected) {
-	      document.fireEvent(this.eventChannels.ERROR, [evt]);
+	      window.fireEvent(this.eventChannels.ERROR, [evt]);
 	    }
 	},
 
@@ -133,7 +133,7 @@ IRC.Connection = new Class({
 		    if(endLine > -1) {
 		    	var messages = this.dataPackage.substr(0, endLine).split("\r\n"); // grab the messages that came in so far and split them by line.
 		    	for(i=0; i<messages.length; i++) {
-		    		document.fireEvent(this.eventChannels.DATAAVAILABLE, [new IRC.Server.Message(messages[i])]);
+		    		window.fireEvent(this.eventChannels.DATAAVAILABLE, [new IRC.Server.Message(messages[i])]);
 		    	}
 		    	this.dataPackage = this.dataPackage.substr(endLine +2); // preseve the rest of the queue.
 		    }
@@ -158,7 +158,7 @@ IRC.Connection = new Class({
 	    this.established = false;
 	    this.accepted = false;
 	    this.closeSocket();
-	    document.fireEvent('/connection/'+this.options.server+'/quit', ['Quit: '+msg]);
+	    window.fireEvent('/connection/'+this.options.server+'/quit', ['Quit: '+msg]);
 	},
 
 	destroy: function (data) {
@@ -174,7 +174,7 @@ IRC.Connection = new Class({
 	    this.eccepted = false;
 	    this.connected = false;
 	    console.log("[IRC.Connection] Disconnected from server.", this.options.server);
-	    document.fireEvent('/connection/'+this.options.server+'/disconnected', [" Disconnected from server."+ this.options.server])
+	    window.fireEvent('/connection/'+this.options.server+'/disconnected', [" Disconnected from server."+ this.options.server])
 	 }
 
 });

@@ -1,12 +1,17 @@
 <!doctype html>
 <html>
   <head>
-    <title>SchizoIRC v0.2</title>
+    <title>SchizIRC v0.2</title>
   <script type="text/javascript" src="js/vendor/mustache.mootools.js"></script>
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="css/bootstrap-combined.min.css" />
     <link rel="stylesheet" href="css/google-bootstrap.css" />
-    <style type='text/css'>   
+    <style type='text/css'>  
+
+        html, body {
+          height: 100%;
+        } 
+
         #chanlog {
           margin: 0px 0px 10px; 
           width: 100%; 
@@ -17,6 +22,10 @@
         #serverStatus {
           font-size: 12px;
           padding:0px 0px;
+          font-family: courier;
+          overflow-y: scroll;
+          height: 250px;
+          white-space:pre;
         }
         div#serverStatus  p {
           margin: 0px 0px !important;
@@ -24,34 +33,70 @@
           height:auto;
           line-height: 15px;
         }
+        #pageTitle {
+          padding-top: 0;
+          margin-top: 0;
+          position: fixed;
+          right: 10px;
+          opacity: 0.1;
+          z-index: 1;
+          top: -15px;
+        }
+        #ircContainer {
+          z-index:10;
+          height: 100%
+        }
+
+        section[data-tab] {
+          height: -webkit-calc(100% - 65px);
+        }
+
+        .channellog {
+          width: 100%;
+          min-height: 350px;
+          height: 100%;
+          border: 1px solid lightgray;
+          padding: 5px;
+        }
+
+        form.send {
+          padding-top: 10px;
+        }
+
+        form.send input.input-medium {
+          width: -webkit-calc(100% - 117px);
+        }
+
+        .PRIVMSG.ACTION {
+          color: red;
+        }
     </style>
   </head>
   <body onUnload="appUnload( );">
-    <section style="padding:20px">
-      <h1 onclick='window.location.reload();'>SchizIRC</h1>
+    <section id='pageTitle'>
+      <h1 onclick='window.location.reload();'>SchizIRC v0.2</h1>
     </section>
     <div class="container" id="ircContainer">
       <ul class="nav nav-tabs" id='tabContainer'>
-        <li data-tab='home'  class="active">
+        <li data-tab='home' class="active">
           <a href="#">Home</a>
         </li>
       </ul>
 
       <section data-tab='home' >
         <div class="row">
-
           <div class="span12">
             <div class="hero-unit">
               <h1>O, Hai! o/</h1>
               <p>Hold on to your socks while connecting</p>
-              <div class="input-prepend input-append" style="width:100%">
-              <form id='send'>
+            </div>
+            <div id='serverStatus' style='font-size:12px'></div>
+            <div class="input-prepend input-append" style="width:100%">
+              <form class='send'>
                 <button class="btn" type="button">&#x21C6;</button>
-                  <input type="text" class="input-medium" style="width:90%" class='command' value='/join #botjestest'>
+                  <input type="text" class="input-medium" class='command' value='/join #botjestest'>
                 <input type='submit' class="btn" value="Say It">
               </form>
-             </div>
-             <div id='serverStatus' style='font-size:12px'></div>
             </div>
           </div>
         </div>
@@ -80,11 +125,11 @@
   </script>
 
   <script id='tpl_channelContent' type='text/html'>
-    <section data-tab='channel_{{channelName}}' style='display:none'>
-      <div class="row">
+    <section data-tab='channel_{{channelName}}' data-channel='#{{channelName}}' style='display:none'>
+      <div class="row" style='height:90%'>
 
-        <div class="span10">
-          <textarea readonly id='chanlog_{{channeName}}'></textarea>
+        <div class="span10" style='height: 100%; margin-bottom:10px;'>
+          <div class="channellog"  id='chanlog_{{channelName}}'></div>
         </div>
         <div class="span2">
           <ul>
@@ -95,11 +140,11 @@
         </div>
       </div>
        <div class="row">
-        <div class="span11">
+        <div class="span12">
           <div class="input-prepend input-append" style="width:100%">
-            <form id='send'>
+            <form class='send'>
               <button class="btn" type="button">&#x21C6;</button>
-                <input type="text" class="input-medium" style="width:90%" class='command'>
+                <input type="text" class="input-medium" class='command'>
               <input type='submit' class="btn" value="Say It">
             </form>
           </div>

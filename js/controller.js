@@ -78,6 +78,8 @@ COMMAND_NUMBERS= {
 	"PING" : "PING",
 	"PONG" : "PONG",
 	"JOIN" : "JOIN",
+	"PRIVMSG": "PRIVMSG",
+	"MODE" : "MODE"
 };
 
 EVENT_CHANNELS = {

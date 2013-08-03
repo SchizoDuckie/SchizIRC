@@ -20,17 +20,17 @@ IRC.Server = new Class({
 		this.commands = new IRC.Commands(this);
 
 		console.log("[IRC.SERVER] New Server connection created. handling input");
-		document.addEvent(eventChannels.DATAAVAILABLE, this.onData);
-		document.addEvent('/user/input', this.onUserCommand);
-		document.addEvent(eventChannels.JOIN, this.joinChannel);
+		window.addEvent(eventChannels.DATAAVAILABLE, this.onData);
+		window.addEvent('/user/input', this.onUserCommand);
+		window.addEvent(eventChannels.JOIN, this.joinChannel);
 		if (this.options.password) {
 			this.send('PASS '+this.password);
 		}
-		this.send("NICK " + this.options.nick);
-		this.send("USER " + this.options.userName + " " + this.options.server + " " + this.options.hostName+ " "   + this.options.realName);		
+		this.commands.NICK(this.options.nick);
+		this.commands.USER(this.options.userName + " " + this.options.server + " " + this.options.hostName+ " "   + this.options.realName);		
 	},
 
-	onUserCommand: function(data) {
+	onUserCommand: function(data, channel) {
 		if(data[0] == '/') {
 			cmd = data.substring(1).split(' ')[0];
 			console.log("Command detected: ", cmd);
@@ -39,7 +39,7 @@ IRC.Server = new Class({
 				this.commands[cmd.toUpperCase()](data.substr(2 + cmd.length));
 			} 
 		} else {
-			this.sendPM(this.getActiveChannel(), data);
+			this.sendPM(channel || this.getActiveChannel(), data);
 		}
 	},
 
@@ -65,11 +65,14 @@ IRC.Server = new Class({
 	},
 
 	send: function(data) {
-		document.fireEvent(this.eventChannels.SEND, data);
+		window.fireEvent(this.eventChannels.SEND, data);
+		
 	},
 
 	sendPM: function (target, msg) {
 	    this.send(["PRIVMSG", target, ":" + msg].join (" "));
+	    window.fireEvent('/channel/'+target.substring(1)+'/message',
+	     new IRC.Server.Message(this.options.nick+'!'+this.options.userName+'@'+this.options.hostName+' PRIVMSG '+target+' :'+msg, this.host));
 	},
 
 
@@ -96,49 +99,12 @@ IRC.Server = new Class({
 
 	disconnect: function(message) {
 		console.log('IRC.Server Disconnect ', message);
-		document.fireEvent(this.eventChannels.CLOSE, message);
+		window.fireEvent(this.eventChannels.CLOSE, message);
 	},
 
 	onData: function(message) {
 		console.log("[IRC.Server] data received for " + this.options.server, message.getContent(), message);
 		message.handle(this);
-	},
-	 
-	handleJoin: function (nick, host, target) {
-		var channelName, _nick, user, channel, msg;
-		//add nick to connection users
-		if (!nick || !target) { return; }
-		channelName = this.getChannelName(target);
-		_nick = this.getNick();
-		if (nick === _nick) {
-		  console.log("JOINING CHANNEL: " + target);
-		  if (this.channels[channelName]) {
-		    this.channels[channelName].destroy();
-		    delete this.channels[channelName];
-		  }
-		  this.channels[channelName] = new Channel(target, this.CHANNEL_TYPES.CHANNEL, this.server, this.logPref, this.getConnectionId());
-		  this.client.getTopic(target);
-		  fireEvent(EventChannels.CHANNELS_CHANGED, ["join", channelName, this.server, null, this.getConnectionId()]);
-		  if (channelName in this.names) {
-		    this.addNamesToChannel(channelName, this.names[channelName]);
-		  } else {
-		    this.client.sendNames(target);
-		  }
-		}
-		user = this.getUser(nick);
-		if (!user) {
-		  user = new User(nick, host);
-		  this.users[nick] = user;
-		}
-		//add nick to channel
-		if (channelName in this.channels) {
-		  channel = this.channels[channelName];
-		  channel.addUser(user);
-		  channel.publishUserActivity();
-		}
-		msg = new ActivityItem("join", nick, target, null, user, host);
-		this.addActivityToChannel(target, msg);
-	},
-
+	}
 
 });
