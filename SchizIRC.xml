@@ -1,10 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<application xmlns="http://ns.adobe.com/air/application/3.0">
+<?xml version="1.0" encoding="utf-8" ?> 
+<application xmlns="http://ns.adobe.com/air/application/3.6"> 
   <id>schizirc.github.com</id>
   <versionNumber>0.2.0</versionNumber>
   <filename>SchizIRC</filename>
+  <name>SchizIRc v.0.2.0</name>
+  <description>
+    <text xml:lang="en">Air IRC client</text>
+  </description>
   <initialWindow>
-    <content>index-dev.html</content>
+    <content>./index-dev.html</content>
     <systemChrome>standard</systemChrome>
     <transparent>false</transparent>
     <visible>true</visible>
@@ -20,5 +24,14 @@
     <image32x32>icons/DiomedesIcon32.png</image32x32>
     <image16x16>icons/DiomedesIcon16.png</image16x16>
   </icon>
+  <android>
+    <manifestAdditions> 
+      <![CDATA[      
+          <manifest android:installLocation="preferExternal"> 
+              <uses-permission android:name="android.permission.INTERNET"/> 
+              <application android:allowClearUserData="true" android:enabled="true" android:persistent="true"/>
+          </manifest> 
+      ]]> 
+    </manifestAdditions>
+  </android>
 </application>
-

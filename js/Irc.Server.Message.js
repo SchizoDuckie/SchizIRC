@@ -85,7 +85,7 @@ IRC.Server.Message = new Class({
 		var output = ['['+this.received.format('%H:%M')+']'];
 		var user = this.fromUser.split('!')[0];
 		if(this.fromUser != "!SYSTEM!") {
-			output.push(this.isAction ? '* '+user : this.htmlEntities('<'+user+'>'));	
+			output.push(this.isAction ? '* '+user : Gui.MessageDecorator.htmlEntities('<'+user+'>'));	
 		}
 		output.push(this.decorate(this.messageContent));
 		console.log("[IRC.Server.Message] :"+this.messageCode+" for " + this.toChannel + " :" +this.messageContent+" = " +output.join(''));

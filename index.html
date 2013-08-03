@@ -1,29 +1,71 @@
 <!doctype html>
 <html>
   <head>
-    <title>New Page</title>
+    <title>SchizIRC v0.2</title>
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="css/bootstrap-combined.min.css" />
     <link rel="stylesheet" href="css/google-bootstrap.css" />
-	<script src="servicemonitor.swf" type="application/x-shockwave-flash"></script>
-    <script src="applicationupdater_ui.swf" type="application/x-shockwave-flash"></script>
+    <link rel="stylesheet" href="css/schizirc.css" /> 
+    <script type="text/javascript" src="js/vendor/mustache.js"></script>
   </head>
-  <body onUnload="appUnload( );">
-    <section style="padding:20px">
-      <h1>SchizIRC</h1>
+  <body>
+    <section id='pageTitle'>
+      <h1 onclick='window.location.reload();'>SchizIRC v0.2</h1>
     </section>
-    <div class="container">
-      <ul class="nav nav-tabs">
-        <li>
+    <div class="container" id="ircContainer">
+      <ul class="nav nav-tabs" id='tabContainer'>
+        <li data-tab='home' class="active">
           <a href="#">Home</a>
         </li>
-        <li  class="active">
-          <a>#jongeren</a>
-        </li>
       </ul>
-      <div class="row">
-        <div class="span10">
-          <textarea readonly id='chanlog' style="margin: 0px 0px 10px; width: 100%; height: 100%; min-height:350px"></textarea>
+
+      <section data-tab='home' >
+        <div class="row">
+          <div class="span12">
+            <div class="hero-unit">
+              <h1>O, Hai! o/</h1>
+              <p>Hold on to your socks while connecting</p>
+            </div>
+            <div id='serverStatus' style='font-size:12px'></div>
+            <div class="input-prepend input-append" style="width:100%">
+              <form class='send'>
+                <button class="btn" type="button">&#x21C6;</button>
+                  <input type="text" class="input-medium" class='command' value='/join #botjestest'>
+                <input type='submit' class="btn" value="Say It">
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+  </div>     
+
+  <script type="text/javascript" src="js/vendor/mootools-core.js"></script>
+  <script type="text/javascript" src="js/vendor/mootools-more.js"></script> 
+  
+
+  <script type="text/javascript" src="js/Irc.js"></script>  
+  <script type="text/javascript" src="js/Irc.Commands.js"></script>  
+  <script type="text/javascript" src="js/Irc.Connection.js"></script>  
+  <script type="text/javascript" src="js/Irc.ConnectionAdapter.Chrome.js"></script>  
+  <script type="text/javascript" src="js/Irc.Server.js"></script>  
+  <script type="text/javascript" src="js/Irc.Server.Message.js"></script>  
+  <script type="text/javascript" src="js/Irc.Channel.js"></script>  
+  <script type="text/javascript" src="js/controller.js"></script> 
+  <script type="text/javascript" src="js/gui.js"></script> 
+
+
+  <script id='tpl_channelTab' type='text/html'>
+       <li data-tab='channel_{{channelName}}'>
+          <a>#{{channelName}}</a>
+        </li>
+  </script>
+
+  <script id='tpl_channelContent' type='text/html'>
+    <section data-tab='channel_{{channelName}}' data-channel='#{{channelName}}' style='display:none'>
+      <div class="row" style='height:90%'>
+
+        <div class="span10" style='height: 100%; margin-bottom:10px;'>
+          <div class="channellog"  id='chanlog_{{channelName}}'></div>
         </div>
         <div class="span2">
           <ul>
@@ -33,63 +75,20 @@
           </ul>
         </div>
       </div>
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="span11">
-          <div class="input-append" style="width:100%">
-            <input type="text" class="input-medium" style="width:90%">
-            <button class="btn" type="button">Say It</button>
+       <div class="row">
+        <div class="span12">
+          <div class="input-prepend input-append" style="width:100%">
+            <form class='send'>
+              <button class="btn" type="button">&#x21C6;</button>
+                <input type="text" class="input-medium" class='command'>
+              <input type='submit' class="btn" value="Say It">
+            </form>
           </div>
         </div>
       </div>
-    </div>
-  <script type="text/javascript" src="js/mootools-core.js"></script>
-  <script type="text/javascript" src="js/mootools-more.js"></script>
-  
+    </section>
+  </script>
 
-  <script type="text/javascript" src="js/AIRAliases.js"></script>
-  <script type="text/javascript" src="js/AIRIntrospector.js"></script>  
-  <script type="text/javascript" src="js/irc.js"></script>  
-
-  <script type="text/javascript" src="js/gui.js"></script>  
-  <script type="text/javascript" src="js/connection.js"></script>  
-  <script type="text/javascript" src="js/logger.js"></script>  
-  <script type="text/javascript" src="js/activityList.js"></script>  
-  <script type="text/javascript" src="js/activityItem.js"></script>  
-  <script type="text/javascript" src="js/channel.js"></script>  
-  <script type="text/javascript" src="js/user.js"></script>  
-  <script type="text/javascript" src="js/controller.js"></script>  
-  <script type="text/javascript">
-
-	  
-    var console =  air.Introspector.Console;
-
-    function checkClose ( e ) {
-    //  if ( !confirm( "Are you sure you want to quit?" ) ) {
-     //   console.log(" stoppign!" ); 
-     //   return false;
-    //  }
-    }
-
-    function appLoad ( ) {
-      console.log( "appLoad" );
-
-      window.app = new Controller();
-      
-
-    }
-
-    function appUnload ( ) {
-     console.log(unload);
-    }
-
-    window.onload = appLoad();
-    window.nativeWindow.addEventListener( air.Event.CLOSING, checkClose );
-   </script>
-
-
-    
   </body>
 
 </html>

@@ -1,0 +1,72 @@
+html, body {
+  height: 100%;
+} 
+
+#chanlog {
+  margin: 0px 0px 10px; 
+  width: 100%; 
+  height: 100%; 
+  min-height:350px
+}
+
+#serverStatus {
+  font-size: 12px;
+  padding:0px 0px;
+  font-family: courier;
+  overflow-y: scroll;
+  height: 250px;
+  white-space:pre;
+}
+div#serverStatus  p {
+  margin: 0px 0px !important;
+  padding:0px 0px !important;
+  height:auto;
+  line-height: 15px;
+}
+#pageTitle {
+  padding-top: 0;
+  margin-top: 0;
+  position: fixed;
+  right: 10px;
+  opacity: 0.1;
+  z-index: 1;
+  top: -15px;
+}
+#ircContainer {
+  z-index:10;
+  height: 100%
+}
+
+section[data-tab] {
+  height: -webkit-calc(100% - 65px);
+  height: calc(100% - 65px);
+}
+
+.channellog {
+  width: 100%;
+  min-height: 350px;
+  height: 100%;
+  border: 1px solid lightgray;
+  padding: 5px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.channellog P {
+  white-space: pre;
+  tab-size: 2;
+}
+
+form.send {
+  padding-top: 10px;
+}
+
+form.send input.input-medium {
+  width: -webkit-calc(100% - 117px);
+  width: calc(100% - 117px);
+}
+
+.PRIVMSG.ACTION {
+  color: red;
+}

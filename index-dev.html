@@ -1,12 +1,14 @@
 <!doctype html>
 <html>
   <head>
-    <title>SchizoIRC v0.2</title>
+    <title>SchizIRC v0.2</title>
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="css/bootstrap-combined.min.css" />
     <link rel="stylesheet" href="css/google-bootstrap.css" />
+    <link rel="stylesheet" href="css/schizirc.css" /> 
+    <script type="text/javascript" src="js/vendor/mustache.js"></script>
     <script src="js/vendor/aircore.swf" type="application/x-shockwave-flash"></script>
-	  <script src="js/vendor/servicemonitor.swf" type="application/x-shockwave-flash"></script>
+    <script src="js/vendor/servicemonitor.swf" type="application/x-shockwave-flash"></script>
     <script src="js/vendor/applicationupdater_ui.swf" type="application/x-shockwave-flash"></script>
     <style type='text/css'>   
         #chanlog {
@@ -28,68 +30,43 @@
         }
     </style>
   </head>
-   <body onUnload="appUnload( );">
-    <section style="padding:20px">
-      <h1 onclick='window.location.reload();'>SchizIRC</h1>
+  <body>
+    <section id='pageTitle'>
+      <h1 onclick='window.location.reload();'>SchizIRC v0.2</h1>
     </section>
-    <div class="container">
-      <ul class="nav nav-tabs">
-        <li data-tab='home'  class="active">
+ <div class="container" id="ircContainer">
+      <ul class="nav nav-tabs" id='tabContainer'>
+        <li data-tab='home' class="active">
           <a href="#">Home</a>
-        </li>
-        <li data-tab='channel_jongeren'>
-          <a>#jongeren</a>
         </li>
       </ul>
 
       <section data-tab='home' >
         <div class="row">
-
           <div class="span12">
             <div class="hero-unit">
               <h1>O, Hai! o/</h1>
               <p>Hold on to your socks while connecting</p>
-              <div id='serverStatus' style='font-size:12px'></div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section data-tab='channel_jongeren' style='display:none'>
-        <div class="row">
-
-          <div class="span10">
-            <textarea readonly id='chanlog'></textarea>
-          </div>
-          <div class="span2">
-            <ul>
-              <li>Item 1</li>
-              <li>Item 2</li>
-              <li>Item 3</li>
-            </ul>
-          </div>
-        </div>
-         <div class="row">
-          <div class="span11">
+            <div id='serverStatus' style='font-size:12px'></div>
             <div class="input-prepend input-append" style="width:100%">
-              <form id='send'>
+              <form class='send'>
                 <button class="btn" type="button">&#x21C6;</button>
-                  <input type="text" class="input-medium" style="width:90%" id='command'>
+                  <input type="text" class="input-medium" class='command' value='/join #botjestest'>
                 <input type='submit' class="btn" value="Say It">
               </form>
             </div>
           </div>
         </div>
       </section>
-  </div>    
+  </div>     
 
   <script type="text/javascript" src="js/vendor/mootools-core.js"></script>
   <script type="text/javascript" src="js/vendor/mootools-more.js"></script>
   
 
   <script type="text/javascript" src="js/vendor/AIRAliases.js"></script>
-  <script type="text/javascript" src="js/vendor/AIRIntrospector.js"></script>  
- 
+   
   <script type="text/javascript" src="js/Irc.js"></script>  
   <script type="text/javascript" src="js/Irc.Commands.js"></script>  
   <script type="text/javascript" src="js/Irc.Connection.js"></script>  
@@ -115,6 +92,48 @@
     window.nativeWindow.addEventListener( air.Event.CLOSING, checkClose );
    </script>
 
+ <script id='tpl_channelTab' type='text/html'>
+       <li data-tab='channel_{{channelName}}'>
+          <a>#{{channelName}}</a>
+        </li>
+
+
+
+
+
+
+
+
+  </script>
+
+  <script id='tpl_channelContent' type='text/html'>
+    <section data-tab='channel_{{channelName}}' data-channel='#{{channelName}}' style='display:none'>
+      <div class="row" style='height:90%'>
+
+        <div class="span10" style='height: 100%; margin-bottom:10px;'>
+          <div class="channellog"  id='chanlog_{{channelName}}'></div>
+        </div>
+        <div class="span2">
+          <ul>
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+          </ul>
+        </div>
+      </div>
+       <div class="row">
+        <div class="span12">
+          <div class="input-prepend input-append" style="width:100%">
+            <form class='send'>
+              <button class="btn" type="button">&#x21C6;</button>
+                <input type="text" class="input-medium" class='command'>
+              <input type='submit' class="btn" value="Say It">
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </script>
 
     
   </body>
