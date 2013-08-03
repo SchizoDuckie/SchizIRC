@@ -1,0 +1,3 @@
+SchizIRC
+
+My take at creating an IRC client in HTML5 and Javascript. Uses either Adobe Air or Chrome packaged app API for native socket connections.

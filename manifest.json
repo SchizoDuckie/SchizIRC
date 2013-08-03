@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "version": "0.1",
+  "name": "SchizIRC Chrome",
+  "app": {
+    "background": {
+      "scripts": ["main.js"]
+    }
+  },
+  "permissions": [{
+    "socket": [
+      "tcp-connect:*:6667",
+      "tcp-listen:*:6667"
+      ]
+    }]
+}

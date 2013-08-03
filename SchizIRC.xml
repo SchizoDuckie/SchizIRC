@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://ns.adobe.com/air/application/3.0">
+  <id>schizirc.github.com</id>
+  <versionNumber>0.2.0</versionNumber>
+  <filename>SchizIRC</filename>
+  <initialWindow>
+    <content>index-dev.html</content>
+    <systemChrome>standard</systemChrome>
+    <transparent>false</transparent>
+    <visible>true</visible>
+    <width>1000</width>
+    <height>700</height>
+    <resizable>true</resizable>
+    <x>150</x>
+    <y>150</y>
+  </initialWindow>
+  <icon>
+    <image128x128>icons/DiomedesIcon128.png</image128x128>
+    <image48x48>icons/DiomedesIcon48.png</image48x48>
+    <image32x32>icons/DiomedesIcon32.png</image32x32>
+    <image16x16>icons/DiomedesIcon16.png</image16x16>
+  </icon>
+</application>
+
