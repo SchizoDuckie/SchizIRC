@@ -7,7 +7,7 @@ Gui = new Class({
 		$(document).addEvent('mousedown:relay(.nav-tabs li)', this.switchTabs);
 		$(document).addEvent('/tab/changed', this.showActiveTab);
 		$(document).addEvent('submit:relay(#send)', this.userInput);
-		this.inputField = $('command');
+		this.inputField = $$('.command');
 		this.showActiveTab();
 	},
 
@@ -15,19 +15,20 @@ Gui = new Class({
 		var tabs = $$(".nav-tabs li");
 		tabs.removeClass('active');
 		$(this).addClass('active');
-		document.fireEvent('/tab/changed');
+		document.fireEvent('/tab/changed', this.getAttribute('data-tab'));
 	},
 
-	showActiveTab: function() {
+	showActiveTab: function(name) {
 		$$('section[data-tab]').hide();
-		$$('section[data-tab='+$$('.nav-tabs li.active')[0].getAttribute('data-tab')+']').show();
+		$$('section[data-tab='+name+']').show();
 	},
 
 	userInput: function(e) {
-		console.log("received user input:", this.inputField.value);
+		var target = $(e.target).getElement('input[type=text]');
+		console.log("received user input:", target.value);
 		e.stop();
-		document.fireEvent('/user/input', [this.inputField.value]);
-		this.inputField.value = '';
+		document.fireEvent('/user/input', target.value);
+		target.value = '';
 	},
 
 	/** 

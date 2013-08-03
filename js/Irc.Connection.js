@@ -16,7 +16,9 @@ IRC.Connection = new Class({
 		ERROR: false,
 		DATAAVAILABLE: false,
 		SEND: false,
-		CLOSE: false
+		CLOSE: false,
+		JOIN: false,
+		PART: false,
 	},
 
 	initialize: function(options) {
@@ -28,6 +30,8 @@ IRC.Connection = new Class({
 		this.eventChannels.DATAAVAILABLE = '/connection/'+options.server+'/data';
 		this.eventChannels.SEND = '/connection/'+options.server+'/send';
 		this.eventChannels.CLOSE = '/connection/'+options.server+'/close';
+		this.eventChannels.JOIN = '/connection/'+options.server+'/join';
+		this.eventChannels.PART = '/connection/'+options.server+'/part';
 		
 		document.addEvent(this.eventChannels.LOST, this.disconnected);
 		document.addEvent(this.eventChannels.ERROR, this.connectionError);

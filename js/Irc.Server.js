@@ -2,7 +2,7 @@ IRC.Server = new Class({
 
 	Implements: [Options, Events],
 
-	Binds: ['onData', 'onUserCommand','setActiveChannel'],
+	Binds: ['onData', 'onUserCommand','setActiveChannel','joinChannel'],
 	eventChannels: false,
 	host: false,
 	ping: {
@@ -12,6 +12,7 @@ IRC.Server = new Class({
 	},
 	commands: false,
 	activeChannel: false,
+	channels: {},
 
 	initialize: function(options, eventChannels) {
 		this.setOptions(options);
@@ -21,7 +22,7 @@ IRC.Server = new Class({
 		console.log("[IRC.SERVER] New Server connection created. handling input");
 		document.addEvent(eventChannels.DATAAVAILABLE, this.onData);
 		document.addEvent('/user/input', this.onUserCommand);
-		document.addEvent('/channel/join', this.setActiveChannel);
+		document.addEvent(eventChannels.JOIN, this.joinChannel);
 		if (this.options.password) {
 			this.send('PASS '+this.password);
 		}
@@ -43,15 +44,24 @@ IRC.Server = new Class({
 	},
 
 	getActiveChannel: function() {
-
 		return this.activeChannel;
 	},
 
 	setActiveChannel: function(chan) {
 		if(this.commands.isChannelName(chan)) {
-			console.info("--> Set active channel to! " , chan);
+			console.info("[IRC.Server.js] --> Set active channel to! " , chan);
 			this.activeChannel = chan;
+			if(!this.channels[chan]) {
+				console.log("[IRC.Server.js] Creating New IRC.Channel" , chan);
+				this.channels[chan] = new IRC.Channel(chan);
+			}
 		}
+	},
+
+	joinChannel: function(message) {
+		console.log("----> CHANNELS WAS JOINED! " , message);
+		var chan = message.split(' ')[2];
+		this.setActiveChannel(chan);
 	},
 
 	send: function(data) {

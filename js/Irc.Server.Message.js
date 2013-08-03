@@ -41,6 +41,9 @@ IRC.Server.Message = new Class({
 				case '255' :
 					this.messageData = Array.splice(this.messageData, 3);
 				break;
+				case 'JOIN':
+					this.messageData[2] = this.messageData[2].substring(1);
+				break;
 				default: 
 					this.messageData = Array.splice(this.messageData, 4);
 				break;
@@ -99,6 +102,16 @@ IRC.Server.Message = new Class({
 			document.fireEvent(chan, "PING SCHIZIRC-PINGPONG");
 		}, 30000);
 		
+	},
+
+	JOIN: function(server) {
+		console.log("[IRC.Server.Message] Channel joined!", this.messageContent, this);
+		document.fireEvent(server.eventChannels.JOIN, this.messageContent);
+	},
+
+	NAMES_LIST: function(server) {
+		console.log("Received names list!", this.messageContent);
+
 	}
 
 })
