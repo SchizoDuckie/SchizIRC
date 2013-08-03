@@ -1,3 +1,26 @@
 SchizIRC
 
-My take at creating an IRC client in HTML5 and Javascript. Uses either Adobe Air or Chrome packaged app API for native socket connections.
+My take at creating a IRC client in HTML5 and Javascript. Uses either Adobe Air or Chrome packaged app API for native socket connections.
+
+
+
+To Load this app into Google Chrome:
+
+- Visit chrome://extensions in your browser
+- Ensure that the Developer mode checkbox in the top right-hand corner is checked.
+- Click Load unpacked extension… to pop up a file-selection dialog.
+- Find the directory where you cloned SchizIRC into and select it.
+- Press 'Launch'
+
+To Load this app into Adobe AIR:
+
+- Ensure adl.exe is in your %PATH%
+- Navigate to the directory where you cloned SchizIRC
+- Run adl SchizIRC.xml
+
+
+
+
+
+More info on chrome packaged apps:
+http://developer.chrome.com/apps/about_apps.html
