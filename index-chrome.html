@@ -50,6 +50,7 @@
   <script type="text/javascript" src="js/Irc.Server.js"></script>  
   <script type="text/javascript" src="js/Irc.Server.Message.js"></script>  
   <script type="text/javascript" src="js/Irc.Channel.js"></script>  
+  <script type="text/javascript" src="js/Irc.Channel.Userlist.js"></script>  
   <script type="text/javascript" src="js/controller.js"></script> 
   <script type="text/javascript" src="js/gui.js"></script> 
 
@@ -68,10 +69,8 @@
           <div class="channellog"  id='chanlog_{{channelName}}'></div>
         </div>
         <div class="span2">
-          <ul>
-            <li>Item 1</li>
-            <li>Item 2</li>
-            <li>Item 3</li>
+          <ul class='userlist' data-channel='{{channelName}}'>
+            
           </ul>
         </div>
       </div>

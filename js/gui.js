@@ -1,12 +1,13 @@
 Gui = new Class({
 	Implements: [Options, Events],
-	Binds: ['showActiveTab', 'userInput'],
-	
+	Binds: ['showActiveTab', 'userInput','userList'],
+	userClassMap : { '@' : 'admin', '+' : 'voice' },
 	initialize: function() {
 		window.addEvent('mousedown:relay(.nav-tabs li)', this.switchTabs);
 		window.addEvent('/tab/changed', this.showActiveTab);
 		window.addEvent('/tab/change', this.switchTab);
 		window.addEvent('submit:relay(.send)', this.userInput);
+		window.addEvent('/userlist/update', this.userList);
 		this.showActiveTab('home');
 	},
 
@@ -28,6 +29,17 @@ Gui = new Class({
 		$$('section[data-tab]').hide();
 		$$('section[data-tab='+name+']').show();
 		$$('section[data-tab='+name+'] input[type=text]')[0].focus();
+	},
+
+	userList: function(channel, users) {
+		console.log("Drawing new userlist for " , channel, users);
+		var list = $$(".userlist[data-channel='"+channel.substr(1)+"']");
+		console.log(list);
+		for(var i=0; i<users.length;i++) {
+			var cls = (users[i][0] in this.userClassMap) ? this.userClassMap[users[i][0]] : 'user';
+			console.log(users[i], cls);
+			list.adopt(new Element('li').set({ html: users[i], 'data-user' : users[i]}).addClass(cls));
+		}
 	},
 
 	userInput: function(e) {

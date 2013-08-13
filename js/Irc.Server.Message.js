@@ -140,11 +140,14 @@ IRC.Server.Message = new Class({
 	},
 
 	NAMES_LIST: function(server) {
-		console.log("Received names list!", this.messageContent);
+		console.log("Received names list!", this.messageContent, this);;
+		var msg = this.messageContent.split(' :');
+		var chan = msg[0].substr(1);
+		window.fireEvent('/channel/'+chan+'/recv_userlist', [chan, msg[1].trim().split(' ')]);
 	},
 
 	PRIVMSG: function(server) {		
-		window.fireEvent('/channel/'+this.toChannel.substring(1)+'/message', [this]);
+		window.fireEvent('/channel/'+this.toChannel.substr(1)+'/message', [this]);
 	}
 
 })
